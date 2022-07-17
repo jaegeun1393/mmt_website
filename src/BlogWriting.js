@@ -1,9 +1,10 @@
 import React, { Component } from "react";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
-import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import DecoupledEditor from "@ckeditor/ckeditor5-build-decoupled-document";
 
 import { Link } from "react-router-dom";
 import axios from "axios";
+import { blogDetail } from "./blog";
 
 class BlogWriting extends Component {
   constructor(props) {
@@ -15,22 +16,6 @@ class BlogWriting extends Component {
       subject: "",
     };
     this.uploadAdapter = this.uploadAdapter.bind(this);
-    this.postarticle = this.postarticle.bind(this);
-  }
-
-  async postarticle() {
-    console.log(this.state.context);
-    const data = new FormData();
-    data.append("context", this.state.context);
-
-
-//    axios.post("http://127.0.0.1:5000/uploadblogimage", data)
-//    .then(function (response) {
-//      return response;
-//    })
-//    .catch(function (error) {
-//      alert(error);
-//    });
   }
 
   uploadAdapter(loader) {
@@ -41,7 +26,12 @@ class BlogWriting extends Component {
           loader.file.then((file) => {
             body.append("files", file);
 
-            axios.post("http://127.0.0.1:5000/uploadblogimage", body)
+            console.log({
+              files_files: file,
+            });
+
+            axios
+              .post("http://127.0.0.1:5000/uploadblogimage", body)
               .then(function (response) {
                 return response;
               })
@@ -59,7 +49,7 @@ class BlogWriting extends Component {
       <div>
         <div className="grid grid-cols-2 divide-x divide-none">
           <div
-            className="relative rounded-lg border border-dashed border-gray-500 relative m-8"
+            className=" rounded-lg border border-dashed border-gray-500 relative m-8"
             style={{ width: "300px" }}
           >
             <input
@@ -109,32 +99,36 @@ class BlogWriting extends Component {
         </div>
 
         <CKEditor
-          editor={ClassicEditor}
-          data="<p>Hello from CKEditor 5!</p>"
+          editor={DecoupledEditor}
+          data={blogDetail}
           onReady={(editor) => {
+            editor.ui
+              .getEditableElement()
+              .parentElement.insertBefore(
+                editor.ui.view.toolbar.element,
+                editor.ui.getEditableElement()
+              );
+
             editor.plugins.get("FileRepository").createUploadAdapter = (loader) => {
               return this.uploadAdapter(loader);
             };
+            console.log("Editor is ready to use!", editor);
           }}
           onChange={(event, editor) => {
             const data = editor.getData();
-            this.setState({context: data})
-          //  console.log({ event, editor, data });
+            console.log({ event, editor, data });
           }}
           onBlur={(event, editor) => {
-          //  console.log("Blur.", editor);
+            console.log("Blur.", editor);
           }}
           onFocus={(event, editor) => {
-          //  console.log("Focus.", editor);
+            console.log("Focus.", editor);
           }}
         />
 
-        <button className="w-full m-4 rounded-md border border-blue-500 bg-blue-500 py-2 px-6 text-white transition hover:border-blue-600 hover:bg-blue-600 focus:outline-none focus:ring-4 focus:ring-blue-500 focus:ring-opacity-50 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:border-blue-500 disabled:hover:bg-blue-500 sm:max-w-max"
-        onClick={this.postarticle}
-        >
+        <button className="w-full rounded-md border border-blue-500 bg-blue-500 py-2 px-6 text-white transition hover:border-blue-600 hover:bg-blue-600 focus:outline-none focus:ring-4 focus:ring-blue-500 focus:ring-opacity-50 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:border-blue-500 disabled:hover:bg-blue-500 sm:max-w-max">
           Post
         </button>
-
       </div>
     );
   }
