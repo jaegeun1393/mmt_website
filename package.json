@@ -4,6 +4,8 @@
   "private": true,
   "dependencies": {
     "@ckeditor/ckeditor5-build-classic": "^34.2.0",
+    "@ckeditor/ckeditor5-build-decoupled-document": "^34.2.0",
+    "@ckeditor/ckeditor5-editor-inline": "^34.2.0",
     "@ckeditor/ckeditor5-react": "^5.0.2",
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.3.0",
@@ -18,11 +20,15 @@
     "jspdf": "^2.5.1",
     "ngx-text-editor": "3.1.0",
     "react": "^18.2.0",
+    "react-ckeditor-component": "^1.1.0",
     "react-dom": "^18.2.0",
     "react-pdf": "^5.7.2",
+    "react-render-html": "^0.6.0",
     "react-router-dom": "^6.3.0",
     "react-scripts": "^5.0.1",
     "react-simple-invoice": "^1.0.14",
+    "stream": "^0.0.2",
+    "util": "^0.12.4",
     "web-vitals": "^2.1.4"
   },
   "scripts": {

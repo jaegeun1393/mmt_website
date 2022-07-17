@@ -38,9 +38,14 @@ UPLOAD_FOLDER = 'uploads/blogpost'
 def index():
     return app.send_static_file('index.html')
 
+@app.route('/files/<path:filename>')
+def uploaded_files(filename):
+    path = '/the/uploaded/directory'
+    return send_from_directory(path, filename)
+
 @app.route("/uploadblogimage", methods=["GET", "POST"])
 def upload_blog_post_image():
-    dataimg = request.files.getlist('imgurl')
+    dataimg = request.files.getlist('files')
     print(dataimg)
     custompath = UPLOAD_FOLDER + '/1294'
 
@@ -58,7 +63,7 @@ def upload_blog_post_image():
             url = url_for('uploaded_files', filename=file.filename)
             #    os.remove(custompath + '/' + filename)
     
-    return url
+    return upload_success(url, filename=file.filename)
 
 if __name__=="__main__":
     app.run(debug=True)

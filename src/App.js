@@ -10,6 +10,7 @@ import ClassContents from "./ClassContents";
 import Testmonial from "./Testmonial";
 import BlogWriting from "./BlogWriting";
 import PaymentReport from "./PaymentReport";
+import BlogArticle from "./BlogArticle";
 
 import './App.css';
 
@@ -28,6 +29,7 @@ function App() {
         <Route path="/Testmonial" element={<Testmonial />} /> 
         <Route path="/BlogWriting" element={<BlogWriting />} /> 
         <Route path="/PaymentReport" element={<PaymentReport />} /> 
+        <Route path="/BlogArticle" element={<BlogArticle />} /> 
       </Routes>
     </div>
   );
