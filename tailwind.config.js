@@ -11,7 +11,9 @@ module.exports = {
     "./src/ClassContents.js",
     "./src/Testmonial.js",
     "./src/BlogWriting.js",
-    "./src/PaymentReport.js"
+    "./src/PaymentReport.js",
+    "./src/login/loginNsignup.js",
+    "./src/login/signup.js"
   ],
   theme: {
     extend: {},

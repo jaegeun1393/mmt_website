@@ -11,6 +11,8 @@ import Testmonial from "./Testmonial";
 import BlogWriting from "./BlogWriting";
 import PaymentReport from "./PaymentReport";
 import BlogArticle from "./BlogArticle";
+import Login from "./login/loginNsignup";
+import Signup from "./login/signup";
 
 import './App.css';
 
@@ -22,6 +24,8 @@ function App() {
       <Nav />
       <Routes>
         <Route path="/" element={<Home />} /> 
+        <Route path="/Login" element={<Login />} /> 
+        <Route path="/signup" element={<Signup />} /> 
         <Route path="/Instructors" element={<Instructors />} /> 
         <Route path="/BlogContents" element={<BlogContents />} /> 
         <Route path="/ContactInformation" element={<ContactInformation />} /> 
