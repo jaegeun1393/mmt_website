@@ -12,6 +12,24 @@ class NabBar extends Component {
     };
   }
 
+  async checkloginsession() {
+    var self = this
+    axios.post('http://127.0.0.1:5000/user/get/login', {})
+    .then(function(response){
+      if(response.data.message == "True") {
+        self.setState({formState: true});
+      //  self.set_role();
+      }
+    })
+    .catch(function(error){
+      alert(error);
+    });
+  }
+
+  componentDidMount() {   
+    this.checkloginsession();
+  }
+
   render() {
   return (
     <div>
@@ -31,14 +49,24 @@ class NabBar extends Component {
                 <Link to={"/ClassContents"} className="font-medium leading-6 text-gray-600 md:mr-6 hover:text-gray-900">Class</Link>
                 <Link to={"/ContactInformation"} className="font-medium leading-6 text-gray-600 md:mr-6 hover:text-gray-900">Contact</Link>
             </nav>
+            {
+              this.state.formState === false && (
             <div className="inline-flex items-center justify-center ml-5 space-x-4 md:space-x-10 md:justify-end">
-                <a href="#_" className="text-base font-medium leading-6 text-gray-600 whitespace-no-wrap transition duration-150 ease-in-out hover:text-gray-900">
+                <Link to={"/Login"} className="text-base font-medium leading-6 text-gray-600 whitespace-no-wrap transition duration-150 ease-in-out hover:text-gray-900">
                     Sign in
-                </a>
-                <a href="#_" className="inline-flex items-center justify-center px-4 py-2 text-base font-medium leading-6 text-white whitespace-no-wrap bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-600">
-                    Sign up
-                </a>
+                </Link>
             </div>
+              )
+            }
+            {
+              this.state.formState === true && ( 
+                <div className="inline-flex items-center justify-center ml-5 space-x-4 md:space-x-10 md:justify-end">
+                <Link to={"/Login"} className="text-base font-medium leading-6 text-gray-600 whitespace-no-wrap transition duration-150 ease-in-out hover:text-gray-900">
+                    Dashboard
+                </Link>
+            </div>
+              )
+            }
         </div>
     </div>
 </section>
