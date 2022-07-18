@@ -125,7 +125,7 @@ class PaymentReport extends Component {
         this.autocal_total();
       }
 
-      autocal_total() {
+      async autocal_total() {
         var f_sub_p = 0;
         for(let i=0; i < this.state.num_row; i++) {
             var sub_price = document.getElementById(i+"_price").value * document.getElementById(i+"_quantity").value;
@@ -157,7 +157,7 @@ class PaymentReport extends Component {
     <div className='bg-slate-200'>
     <div className="invoice-box" id="invoice-box">
     <table cellPadding="0" cellSpacing="0">
-        <tr className="top">
+        <tr>
         <td colSpan="4">
             <table>
                 <thead>
