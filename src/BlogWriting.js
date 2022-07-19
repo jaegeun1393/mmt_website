@@ -14,24 +14,43 @@ class BlogWriting extends Component {
       title_img: "",
       context: "",
       subject: "",
+      date: ""
     };
     this.uploadAdapter = this.uploadAdapter.bind(this);
     this.postarticle = this.postarticle.bind(this);
+    this.settitle = this.settitle.bind(this);
+    this.setsubject = this.setsubject.bind(this);
+  }
+
+  settitle = (e) => {
+    this.setState({title: e.target.value});
+  }
+
+  setsubject = (e) => {
+    this.setState({subject: e.target.value});
+    this.state.subject = e.target.value;
   }
 
   async postarticle() {
-    console.log("== ", this.state.context);
-//    const data = new FormData();
-//    data.append("context", this.state.context);
+    const current = new Date();
+    const date = `${current.getDate()}/${current.getMonth()+1}/${current.getFullYear()}`;
+    this.setState({date: date});
 
-      /*  axios.post('http://127.0.0.1:5000/uploadblogimage', data)
-        .then(function(response){
-          return response
-        })
-        .catch(function(error){
-          alert(error);
-        });
-        */
+    var data = {
+      title_img: this.state.title_img,
+      title: this.state.title,
+      date: this.state.date,
+      subject: this.state.subject,
+      context: this.state.context
+    }
+
+    axios.post('http://127.0.0.1:5000/blog/add/article', data)
+    .then(function(response){
+      alert(response.data.message);
+    })
+    .catch(function(error){
+      alert(error);
+    });
   }
 
   uploadAdapter(loader) {
@@ -48,11 +67,11 @@ class BlogWriting extends Component {
             axios.post("http://127.0.0.1:5000/uploadblogimage", body)
               .then(function (response) {
                 //console.log(response.statusText);
-                return response;
+                resolve({ default: `${response.data.link}` });
               //  reader.readAsDataURL( response.statusText );
               })
               .catch(function (error) {
-                alert(error);
+                reject(error);
               });
           });
         });
@@ -92,6 +111,7 @@ class BlogWriting extends Component {
                 type="search"
                 className="block p-2 pl-10 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300"
                 placeholder="Title..."
+                onChange={this.settitle}
                 required
               />
             </div>
@@ -103,12 +123,13 @@ class BlogWriting extends Component {
               <select
                 id="countries"
                 className="block p-2 pl-10 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300"
+                onChange={this.setsubject}
               >
                 <option defaultValue>Choose a country</option>
-                <option value="US">Main</option>
-                <option value="CA">Class</option>
-                <option value="FR">SAT</option>
-                <option value="DE">ACT</option>
+                <option value="Main">Main</option>
+                <option value="Class">Class</option>
+                <option value="SAT">SAT</option>
+                <option value="ACT">ACT</option>
               </select>
             </div>
           </div>

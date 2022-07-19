@@ -32,7 +32,7 @@ db = MySQL()
 db.init_app(app)
 
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg'}
-UPLOAD_FOLDER = 'uploads/blogpost'
+UPLOAD_FOLDER = '../src/uploads/blogpost'
 
 def random_with_N_digits(n):
     range_start = 10**(n-1)
@@ -42,6 +42,47 @@ def random_with_N_digits(n):
 @app.route("/")
 def index():
     return app.send_static_file('index.html')
+
+@app.route('/blog/add/article', methods=["GET", "POST"])
+def blog_add_article():
+    data = request.get_json()
+    conn = db.connect()
+    cur = conn.cursor()
+    cur.execute("INSERT INTO article (aid, title_img, title, date, subject, author_id, context) VALUES(%s, %s, %s, %s, %s, %s, %s)", 
+        (random_with_N_digits(6), data["title_img"], data["title"], data["date"], data["subject"],  "Jaegeun Oh", data["context"]))
+    conn.commit()
+    cur.close()
+    return jsonify({'message': "Successfully register to the website."})
+
+@app.route('/blog/get/article/<aid>', methods=["GET", "POST"])
+def blog_get_article(aid):
+    data = request.get_json()
+    conn = db.connect()
+    cur = conn.cursor()
+
+    cur.execute('SELECT title FROM article WHERE aid = %s', [aid])
+    title = str(cur.fetchone())[2:-3]
+
+    cur.execute('SELECT date FROM article WHERE aid = %s', [aid])
+    date = str(cur.fetchone())[2:-3]
+
+    cur.execute('SELECT subject FROM article WHERE aid = %s', [aid])
+    subject = str(cur.fetchone())[2:-3]
+
+    cur.execute('SELECT author_id FROM article WHERE aid = %s', [aid])
+    author_id = str(cur.fetchone())[2:-3]
+
+    cur.execute('SELECT context FROM article WHERE aid = %s', [aid])
+    context = str(cur.fetchone())[2:-3]
+
+    cur.close()
+    return jsonify({
+        'title': title,
+        'date': date,
+        'subject': subject,
+        'author_id': author_id,
+        'context': context
+        })
 
 @app.route('/files/<path:filename>')
 def uploaded_files(filename):
@@ -64,10 +105,10 @@ def upload_blog_post_image():
         if(file.filename != ''):
             filename = secure_filename(file.filename)
             file.save(os.path.join(custompath, filename))
-            url = url_for('uploaded_files', filename=file.filename)
+            #url = url_for('uploaded_files', filename=file.filename)
             #    os.remove(custompath + '/' + filename)
-    
-    return upload_success(url, filename=file.filename)
+            url = custompath + '/' + filename
+    return jsonify({'link': custompath + '/' + filename})
 
 @app.route('/user/add/info', methods=["GET", "POST"])
 def user_add_info():

@@ -7,6 +7,7 @@ module.exports = {
     "./src/BlogContent.js",
     "./src/Instructors.js",
     "./src/BlogPage.js",
+    "./src/BlogArticle.js",
     "./src/ContactInformation.js",
     "./src/ClassContents.js",
     "./src/Testmonial.js",
