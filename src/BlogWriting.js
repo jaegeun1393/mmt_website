@@ -67,7 +67,7 @@ class BlogWriting extends Component {
             axios.post("http://127.0.0.1:5000/uploadblogimage", body)
               .then(function (response) {
                 //console.log(response.statusText);
-                resolve({ default: `${response.data.link}` });
+                resolve({ default: require(response.data.link) });
               //  reader.readAsDataURL( response.statusText );
               })
               .catch(function (error) {

@@ -32,7 +32,7 @@ db = MySQL()
 db.init_app(app)
 
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg'}
-UPLOAD_FOLDER = '../src/uploads/blogpost'
+UPLOAD_FOLDER = './uploads/blogpost'
 
 def random_with_N_digits(n):
     range_start = 10**(n-1)
@@ -107,7 +107,8 @@ def upload_blog_post_image():
             file.save(os.path.join(custompath, filename))
             #url = url_for('uploaded_files', filename=file.filename)
             #    os.remove(custompath + '/' + filename)
-            url = custompath + '/' + filename
+            url = str(custompath + '/' + filename)
+        print(url)
     return jsonify({'link': custompath + '/' + filename})
 
 @app.route('/user/add/info', methods=["GET", "POST"])
