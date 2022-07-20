@@ -5,6 +5,7 @@ import DecoupledEditor from "@ckeditor/ckeditor5-build-decoupled-document";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { blogDetail } from "./blog";
+import { CLIENT_URL } from "./util";
 
 class BlogWriting extends Component {
   constructor(props) {
@@ -14,7 +15,7 @@ class BlogWriting extends Component {
       title_img: "",
       context: "",
       subject: "",
-      date: ""
+      date: "",
     };
     this.uploadAdapter = this.uploadAdapter.bind(this);
     this.postarticle = this.postarticle.bind(this);
@@ -23,38 +24,39 @@ class BlogWriting extends Component {
   }
 
   settitle = (e) => {
-    this.setState({title: e.target.value});
-  }
+    this.setState({ title: e.target.value });
+  };
 
   setsubject = (e) => {
-    this.setState({subject: e.target.value});
+    this.setState({ subject: e.target.value });
     this.state.subject = e.target.value;
-  }
+  };
 
   async postarticle() {
     const current = new Date();
-    const date = `${current.getDate()}/${current.getMonth()+1}/${current.getFullYear()}`;
-    this.setState({date: date});
+    const date = `${current.getDate()}/${current.getMonth() + 1}/${current.getFullYear()}`;
+    this.setState({ date: date });
 
     var data = {
       title_img: this.state.title_img,
       title: this.state.title,
       date: this.state.date,
       subject: this.state.subject,
-      context: this.state.context
-    }
+      context: this.state.context,
+    };
 
-    axios.post('http://127.0.0.1:5000/blog/add/article', data)
-    .then(function(response){
-      alert(response.data.message);
-    })
-    .catch(function(error){
-      alert(error);
-    });
+    axios
+      .post("http://127.0.0.1:5000/blog/add/article", data)
+      .then(function (response) {
+        alert(response.data.message);
+      })
+      .catch(function (error) {
+        alert(error);
+      });
   }
 
   uploadAdapter(loader) {
-  //  var reader = new FileReader();
+    //  var reader = new FileReader();
     return {
       upload: () => {
         return new Promise((resolve, reject) => {
@@ -64,11 +66,11 @@ class BlogWriting extends Component {
 
             //console.log({files_files: file});
 
-            axios.post("http://127.0.0.1:5000/uploadblogimage", body)
+            axios
+              .post("http://127.0.0.1:5000/uploadblogimage", body)
               .then(function (response) {
                 //console.log(response.statusText);
-                resolve({ default: require(response.data.link) });
-              //  reader.readAsDataURL( response.statusText );
+                resolve({ default: `${CLIENT_URL}/${response.data.link}` });
               })
               .catch(function (error) {
                 reject(error);
@@ -153,19 +155,21 @@ class BlogWriting extends Component {
           }}
           onChange={(event, editor) => {
             const data = editor.getData();
-            console.log( { event, editor, data } );
-            this.setState({context: data});
+            console.log({ event, editor, data });
+            this.setState({ context: data });
           }}
           onBlur={(event, editor) => {
-          //  console.log("Blur.", editor);
+            //  console.log("Blur.", editor);
           }}
           onFocus={(event, editor) => {
-          //  console.log("Focus.", editor);
+            //  console.log("Focus.", editor);
           }}
         />
 
-        <button className="w-full rounded-md border border-blue-500 bg-blue-500 py-2 px-6 text-white transition hover:border-blue-600 hover:bg-blue-600 focus:outline-none focus:ring-4 focus:ring-blue-500 focus:ring-opacity-50 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:border-blue-500 disabled:hover:bg-blue-500 sm:max-w-max"
-        onClick={this.postarticle}>
+        <button
+          className="w-full rounded-md border border-blue-500 bg-blue-500 py-2 px-6 text-white transition hover:border-blue-600 hover:bg-blue-600 focus:outline-none focus:ring-4 focus:ring-blue-500 focus:ring-opacity-50 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:border-blue-500 disabled:hover:bg-blue-500 sm:max-w-max"
+          onClick={this.postarticle}
+        >
           Post
         </button>
       </div>
