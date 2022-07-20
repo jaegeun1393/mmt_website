@@ -32,7 +32,7 @@ db = MySQL()
 db.init_app(app)
 
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg'}
-UPLOAD_FOLDER = './uploads/blogpost'
+UPLOAD_FOLDER = 'uploads/blogpost'
 
 def random_with_N_digits(n):
     range_start = 10**(n-1)
@@ -42,6 +42,11 @@ def random_with_N_digits(n):
 @app.route("/")
 def index():
     return app.send_static_file('index.html')
+
+@app.route('/uploads/blogpost/1294/<img>', methods=["GET", "POST"])
+def getimg(img):
+    filename = 'uploads\\blogpost\\1294\\logo.jpg'
+    return send_file(filename, mimetype='image/jpg')
 
 @app.route('/blog/add/article', methods=["GET", "POST"])
 def blog_add_article():
