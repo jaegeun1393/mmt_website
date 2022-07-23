@@ -1,17 +1,37 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import DecoupledEditor from "@ckeditor/ckeditor5-build-decoupled-document";
 import { blogDetail } from "./blog";
+import axios from "axios";
+import { CLIENT_URL } from "./util";
 
 
 function Post() {
+  const [title, settitle] = useState('')
+  const [titleimg, settitleimg] = useState('')
+  const [date, setdate] = useState('')
+  const [author, setauthor] = useState('')
+  const [context, setcontext] = useState('')
+  const [subject, setsubject] = useState('')
   const { id } = useParams();
 
   useEffect(() => {
     function callApi() {
-      //Here you will call api through axios
-      console.log(id);
+      var data = {
+        aid: id
+      }
+      axios.post("http://127.0.0.1:5000/blog/get/article", data)
+      .then(function (response) {
+        settitle(response.data.title);
+        setdate(response.data.created_date);
+        setsubject(response.data.subject);
+        setauthor(response.data.author_id);
+        setcontext(response.data.context);
+      })
+      .catch(function (error) {
+        alert(error);
+      });
     }
 
     callApi();
@@ -19,7 +39,6 @@ function Post() {
 
   return( 
   <div> 
-    {id}
     <div
         className="article"
         style={{
@@ -29,19 +48,19 @@ function Post() {
         }}
       >
         <div className="title font-medium leading-tight text-5xl mt-0 mb-2 text-blue-800 text-center">
-          This is the title
+          {title}
         </div>
         <hr className="mt-6" />
         <div class="article_info">
-          <div className="date float-left mr-10">Date: 2020-03-04</div>
-          <div className="Subject float-right">Author: Jaegeun Oh</div>
-          <div className="Author">Subject: Main Blog</div>
+          <div className="date float-left mr-10">Date: {date}</div>
+          <div className="Subject float-right">Author: {author}</div>
+          <div className="Author">Subject: {subject}</div>
         </div>
         <hr />
         <CKEditor
           disabled={true}
           editor={DecoupledEditor}
-          data={blogDetail}
+          data={context}
           onReady={(editor) => {}}
           onChange={(event, editor) => {
             const data = editor.getData();

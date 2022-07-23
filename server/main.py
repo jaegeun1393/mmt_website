@@ -43,9 +43,14 @@ def random_with_N_digits(n):
 def index():
     return app.send_static_file('index.html')
 
-@app.route('/uploads/blogpost/1294/<img>', methods=["GET", "POST"])
-def getimg(img):
-    filename = 'uploads\\blogpost\\1294\\logo.jpg'
+@app.route('/uploads/blog/post/add/id', methods=["GET", "POST"])
+def upload_blog_post_add_id():
+    aid = random_with_N_digits(10)
+    return jsonify({'blog_id': aid})
+
+@app.route('/uploads/blogpost/<aid>/<img>', methods=["GET", "POST"])
+def getimg(aid, img):
+    filename = 'uploads\\blogpost\\'+ aid +'\\' + img
     return send_file(filename, mimetype='image/jpg')
 
 @app.route('/blog/add/article', methods=["GET", "POST"])
@@ -54,14 +59,15 @@ def blog_add_article():
     conn = db.connect()
     cur = conn.cursor()
     cur.execute("INSERT INTO article (aid, title_img, title, date, subject, author_id, context) VALUES(%s, %s, %s, %s, %s, %s, %s)", 
-        (random_with_N_digits(6), data["title_img"], data["title"], data["date"], data["subject"],  "Jaegeun Oh", data["context"]))
+        (data["blog_article_id"], data["title_img"], data["title"], data["date"], data["subject"],  "Jaegeun Oh", data["context"]))
     conn.commit()
     cur.close()
     return jsonify({'message': "Successfully register to the website."})
 
-@app.route('/blog/get/article/<aid>', methods=["GET", "POST"])
-def blog_get_article(aid):
+@app.route('/blog/get/article', methods=["GET", "POST"])
+def blog_get_article():
     data = request.get_json()
+    aid = data["aid"]
     conn = db.connect()
     cur = conn.cursor()
 
@@ -81,9 +87,10 @@ def blog_get_article(aid):
     context = str(cur.fetchone())[2:-3]
 
     cur.close()
+    print(context)
     return jsonify({
         'title': title,
-        'date': date,
+        'created_date': date,
         'subject': subject,
         'author_id': author_id,
         'context': context
@@ -97,12 +104,10 @@ def uploaded_files(filename):
 @app.route("/uploadblogimage", methods=["GET", "POST"])
 def upload_blog_post_image():
     dataimg = request.files.getlist('files')
-    custompath = UPLOAD_FOLDER + '/1294'
+    data_aid = request.form['aid']
+    custompath = UPLOAD_FOLDER + '/' + data_aid
 
     if((os.path.exists(custompath)) == False):
-        os.makedirs(custompath)
-    else:
-        shutil.rmtree(custompath)
         os.makedirs(custompath)
 
     url = ""
@@ -113,7 +118,7 @@ def upload_blog_post_image():
             #url = url_for('uploaded_files', filename=file.filename)
             #    os.remove(custompath + '/' + filename)
             url = str(custompath + '/' + filename)
-        print(url)
+    #    print(url)
     return jsonify({'link': custompath + '/' + filename})
 
 @app.route('/user/add/info', methods=["GET", "POST"])

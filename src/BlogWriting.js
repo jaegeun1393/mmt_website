@@ -11,6 +11,7 @@ class BlogWriting extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      blog_article_id: "",
       title: "",
       title_img: "",
       context: "",
@@ -21,6 +22,7 @@ class BlogWriting extends Component {
     this.postarticle = this.postarticle.bind(this);
     this.settitle = this.settitle.bind(this);
     this.setsubject = this.setsubject.bind(this);
+    this.set_blog_id = this.set_blog_id.bind(this);
   }
 
   settitle = (e) => {
@@ -32,12 +34,25 @@ class BlogWriting extends Component {
     this.state.subject = e.target.value;
   };
 
+  async set_blog_id() {
+    var self = this;
+    axios.post("http://127.0.0.1:5000/uploads/blog/post/add/id", {})
+    .then(function (response) {
+      self.setState({ blog_article_id: response.data.blog_id });
+    })
+    .catch(function (error) {
+      alert(error);
+    });
+  }
+  
   async postarticle() {
     const current = new Date();
     const date = `${current.getDate()}/${current.getMonth() + 1}/${current.getFullYear()}`;
     this.setState({ date: date });
+    this.state.date = date;
 
     var data = {
+      blog_article_id: this.state.blog_article_id,
       title_img: this.state.title_img,
       title: this.state.title,
       date: this.state.date,
@@ -45,8 +60,7 @@ class BlogWriting extends Component {
       context: this.state.context,
     };
 
-    axios
-      .post("http://127.0.0.1:5000/blog/add/article", data)
+    axios.post("http://127.0.0.1:5000/blog/add/article", data)
       .then(function (response) {
         alert(response.data.message);
       })
@@ -56,20 +70,16 @@ class BlogWriting extends Component {
   }
 
   uploadAdapter(loader) {
-    //  var reader = new FileReader();
     return {
       upload: () => {
         return new Promise((resolve, reject) => {
           const body = new FormData();
           loader.file.then((file) => {
             body.append("files", file);
-
-            //console.log({files_files: file});
-
-            axios
-              .post("http://127.0.0.1:5000/uploadblogimage", body)
+            body.append("aid", this.state.blog_article_id);
+            console.log(this.state.blog_article_id);
+            axios.post("http://127.0.0.1:5000/uploadblogimage", body)
               .then(function (response) {
-                //console.log(response.statusText);
                 resolve({ default: `${CLIENT_URL}/${response.data.link}` });
               })
               .catch(function (error) {
@@ -79,6 +89,10 @@ class BlogWriting extends Component {
         });
       },
     };
+  }
+
+  componentDidMount() {
+    this.set_blog_id();
   }
 
   render() {

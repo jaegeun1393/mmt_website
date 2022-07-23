@@ -34,7 +34,6 @@ function App() {
         <Route path="/Testmonial" element={<Testmonial />} />
         <Route path="/BlogWriting" element={<BlogWriting />} />
         <Route path="/PaymentReport" element={<PaymentReport />} />
-        <Route path="/BlogArticle" element={<BlogArticle />} />
         <Route path="/post/:id" element={<Post />} />
       </Routes>
     </div>

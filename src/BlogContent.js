@@ -18,7 +18,7 @@ class BlogContent extends Component {
           <div className="px-8 py-10 mx-auto lg:max-w-screen-xl sm:max-w-xl md:max-w-full sm:px-12 md:px-16 lg:py-20 sm:py-16">
             <div className="grid gap-x-8 gap-y-12 sm:gap-y-16 md:grid-cols-2 lg:grid-cols-3">
               <div className="relative">
-                <Link to={`/post/1`}>
+                <Link to={`/post/1724384805`}>
                   <a
                     href="#_"
                     className="block overflow-hidden group rounded-xl"
