@@ -141,6 +141,17 @@ def check_login():
     else:
         return jsonify({'message': "False"})
 
+@app.route("/user/get/info/namenid", methods=["GET", "POST"])
+def check_user_info():
+    conn = db.connect()
+    cur = conn.cursor()
+    cur.execute('SELECT id FROM accounts WHERE Role = %s', ["P"])
+    ids = cur.fetchall()
+    idslst = [str(list(i))[2:-2] for i in ids]
+
+    return 0
+
+
 @app.route("/user/login", methods=["GET", "POST"])
 def login():
     data = request.get_json()

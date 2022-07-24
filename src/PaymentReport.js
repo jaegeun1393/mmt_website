@@ -18,7 +18,10 @@ class PaymentReport extends Component {
           addrow_show: "block",
           subtotal1: 0,
           subtotal2: 0,
-          f_sub: 0
+          f_sub: 0,
+          c_name: "Angie Kim",
+          c_email: "angiek@mmtprep.com",
+          c_num: "971-256-1284"
         };
         this.preset = this.preset.bind(this)
         this.addRow = this.addRow.bind(this)
@@ -305,13 +308,13 @@ class PaymentReport extends Component {
                             <div className="md:w-7/12 w-full flex justify-between text-xs mb-7 p-1.5 text-gray-600">
                                 <div className="">
                                     <p>Bill To:</p>
-                                    <p className="font-bold text-gray-800">Angie Kim</p>
+                                    <p className="font-bold text-gray-800">{this.state.c_name}</p>
                                     <p>United States</p>
                                 </div>
                                 <div className=" text-right md:text-left">
                                     <p>Additional Customer Info:</p>
-                                    <p>angiek@mmtprep.com</p>
-                                    <p>Phone: 9712562586</p>
+                                    <p>Address: {this.state.c_email}</p>
+                                    <p>Phone: {this.state.c_num}</p>
                                 </div>
                             </div>
                             <div className="container"> 
