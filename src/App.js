@@ -10,9 +10,10 @@ import ClassContents from "./ClassContents";
 import Testmonial from "./Testmonial";
 import BlogWriting from "./BlogWriting";
 import PaymentReport from "./PaymentReport";
-import BlogArticle from "./BlogArticle";
 import Login from "./login/loginNsignup";
 import Signup from "./login/signup";
+
+import M_Dashboard from "./dashboard/manager_dashboard/m_dashboard"
 
 import "./App.css";
 import Post from "./post";
@@ -35,6 +36,11 @@ function App() {
         <Route path="/BlogWriting" element={<BlogWriting />} />
         <Route path="/PaymentReport" element={<PaymentReport />} />
         <Route path="/post/:id" element={<Post />} />
+
+        <Route path="/dashboard/manager" element={<M_Dashboard />}>
+
+        </Route>
+
       </Routes>
     </div>
   );

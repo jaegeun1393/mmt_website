@@ -7,14 +7,14 @@ module.exports = {
     "./src/BlogContent.js",
     "./src/Instructors.js",
     "./src/BlogPage.js",
-    "./src/BlogArticle.js",
     "./src/ContactInformation.js",
     "./src/ClassContents.js",
     "./src/Testmonial.js",
     "./src/BlogWriting.js",
     "./src/PaymentReport.js",
     "./src/login/loginNsignup.js",
-    "./src/login/signup.js"
+    "./src/login/signup.js",
+    "./src/dashboard/manager_dashboard/m_dashboard.js"
   ],
   theme: {
     extend: {},
